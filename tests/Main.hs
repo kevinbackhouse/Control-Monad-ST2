@@ -28,7 +28,7 @@ tests =
   [ testGroup "Control.Monad.ST2"
       [ testProperty "CreateWriteRead" prop_CreateWriteRead
       , testProperty "ST2RArray" prop_ST2RArray
-      , testProperty "concurrentlyST2" prop_concurrentlyST2
+      , testProperty "parallelST2" prop_parallelST2
       ]
   ]
 
@@ -69,8 +69,8 @@ prop_ST2RArray_helper n =
         ]
       return (mkST2RArray xs)
 
-prop_concurrentlyST2 :: Int -> TestST2 Bool
-prop_concurrentlyST2 k0 =
+prop_parallelST2 :: Int -> TestST2 Bool
+prop_parallelST2 k0 =
   let nShift = 12 in
   let k = k0 `mod` (nShift+1) in
   let n = (1 :: Int) `shiftL` nShift in
@@ -81,7 +81,7 @@ prop_concurrentlyST2 k0 =
      let bnds' = (0,n'-1)
 
      -- Initialise the array, using multiple threads.
-     concurrentlyST2 bnds' $ \i ->
+     parallelST2 bnds' $ \i ->
        sequence_
          [ let j' = (i `shiftL` k) .|. j in
            writeST2Array xs j' j'
@@ -90,7 +90,7 @@ prop_concurrentlyST2 k0 =
 
      -- Compute sub-totals, using multiple threads.
      ys <- newST2Array_ bnds'
-     concurrentlyST2 bnds' $ \i ->
+     parallelST2 bnds' $ \i ->
        do Sum total <-
             execWriterT $
             sequence_

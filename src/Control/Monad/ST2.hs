@@ -46,8 +46,8 @@ module Control.Monad.ST2
   , mkST2RArray
   , readST2RArray
 
-    -- * Concurrency
-  , concurrentlyST2
+    -- * Parallelism
+  , parallelST2
   )
 where
 
@@ -88,16 +88,18 @@ readOnlyST2 :: (forall w. ST2 r w a) -> ST2 r w' a
 readOnlyST2 m = m
 
 -- | 'runPureST2' is semantically equivalent to pureST2, but uses a
--- newtype to package the forall. Sometimes this packaging is
+-- newtype to package the @forall@. Sometimes this packaging is
 -- convenient when passing a value of type 'PureST2' as an argument
--- because it keeps the types simple.
+-- because it avoids the need for a nested @forall@ in the type
+-- signature.
 newtype PureST2 a
   = PureST2 { runPureST2 :: forall r w. ST2 r w a }
 
 -- | 'runReadOnlyST2' is semantically equivalent to readOnlyST2, but
--- uses a newtype to package the forall. Sometimes this packaging is
+-- uses a newtype to package the @forall@. Sometimes this packaging is
 -- convenient when passing a value of type 'ReadOnlyST2' as an
--- argument because it keeps the types simple.
+-- argument because it avoids the need for a nested @forall@ in the
+-- type signature.
 newtype ReadOnlyST2 r a
   = ReadOnlyST2 { runReadOnlyST2 :: forall w. ST2 r w a }
 
@@ -254,8 +256,8 @@ readST2RArray (ST2RArray xs) i =
 -- | Spawn one thread for each index in the range and wait for all the
 -- threads to finish. Each thread is parameterised by its index, which
 -- is an element of the range.
-concurrentlyST2 :: Ix i => (i,i) -> (i -> ST2 r w ()) -> ST2 r w ()
-concurrentlyST2 bnds f =
+parallelST2 :: Ix i => (i,i) -> (i -> ST2 r w ()) -> ST2 r w ()
+parallelST2 bnds f =
   let n = rangeSize bnds in
   assert (n > 0) $
   ST2 $
