@@ -162,8 +162,8 @@ exportST2Ref :: ST2Ref () () a -> IORef a
 exportST2Ref (ST2Ref r) = r
 
 -- | Mutable array. 'ST2Array' is actually just a newtype of an
--- | 'IOArray', but the @r@ and @w@ type parameters allow the read and
--- | write dependencies to be tracked by the type system.
+-- 'IOArray', but the @r@ and @w@ type parameters allow the read and
+-- write dependencies to be tracked by the type system.
 newtype ST2Array r w i a
   = ST2Array (IOArray i a)
 
