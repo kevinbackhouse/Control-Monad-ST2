@@ -1,7 +1,7 @@
 -- Copyright 2013 Kevin Backhouse.
 
 name:                Control-Monad-ST2
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            A variation on the ST monad with two type parameters.
 description:         The ST2 monad is like the ST monad, but with
                      finer-grained control over access to mutable
@@ -27,12 +27,13 @@ tested-with:         GHC==7.6.2
 source-repository this
   type:      git
   location:  https://github.com/kevinbackhouse/Control-Monad-ST2.git
-  tag:       Version-0.1.0.0
+  tag:       Version-0.1.0.1
 
 library
   exposed-modules:   Control.Monad.ST2
   hs-source-dirs:    src
-  build-depends:     base, array, SafeSemaphore, QuickCheck
+  build-depends:     base >= 4.5 && < 5,
+                     array, SafeSemaphore, QuickCheck
   ghc-options:       -Wall
   extensions:        Safe RankNTypes ExistentialQuantification
                      DeriveFunctor
@@ -40,7 +41,8 @@ library
 test-suite Main
   type:              exitcode-stdio-1.0
   x-uses-tf:         true
-  build-depends:     base, array, SafeSemaphore, QuickCheck,
+  build-depends:     base >= 4.5 && < 5,
+                     array, SafeSemaphore, QuickCheck,
                      mtl,
                      test-framework,
                      test-framework-quickcheck2,
