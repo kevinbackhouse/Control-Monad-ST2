@@ -24,6 +24,11 @@ cabal-version:       >=1.8
 Extra-source-files:  README.txt
 tested-with:         GHC==7.6.2
 
+source-repository this
+  type:      git
+  location:  https://github.com/kevinbackhouse/Control-Monad-ST2.git
+  tag:       Version-0.1.0.0
+
 library
   exposed-modules:   Control.Monad.ST2
   hs-source-dirs:    src
